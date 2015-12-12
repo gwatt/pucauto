@@ -18,7 +18,7 @@ except:
 
 config_vars = dir(config)
 for var in ['username', 'password', 'min_value']:
-    if var is not in config_vars:
+    if var not in config_vars:
         print "Required configuration '%s' not found!" % (var,)
         exit()
 if 'find_add_ons' not in config_vars:
