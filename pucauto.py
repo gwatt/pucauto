@@ -10,10 +10,21 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 from lib import logger
 
+try:
+    import config
+except:
+    print 'No config.py found!'
+    exit()
 
-with open("config.json") as config:
-    CONFIG = json.load(config)
-
+config_vars = dir(config)
+for var in ['username', 'password', 'min_value']:
+    if var is not in config_vars:
+        print "Required configuration '%s' not found!" % (var,)
+        exit()
+if 'find_add_ons' not in config_vars:
+    config.find_add_ons = False
+if 'minutes_between_add_ons_check' not in config_vars:
+    config.minutes_between_add_ons_check = None
 
 LOGGER = logger.get_default_logger(__name__)
 DRIVER = webdriver.Firefox()
@@ -54,12 +65,12 @@ def wait_for_load():
 
 
 def log_in():
-    """Navigate to pucatrade.com and log in using credentials from CONFIG."""
+    """Navigate to pucatrade.com and log in using credentials from config."""
 
     DRIVER.get("http://www.pucatrade.com")
     home_login_div = DRIVER.find_element_by_id("home-login")
-    home_login_div.find_element_by_id("login").send_keys(CONFIG["username"])
-    home_login_div.find_element_by_id("password").send_keys(CONFIG["password"])
+    home_login_div.find_element_by_id("login").send_keys(config.username)
+    home_login_div.find_element_by_id("password").send_keys(config.password)
     home_login_div.find_element_by_class_name("btn-primary").click()
 
 
@@ -91,8 +102,7 @@ def check_runtime():
     RAM cloud server.
     """
 
-    hours_to_run = CONFIG.get("hours_to_run")
-    if hours_to_run:
+    if config.hours_to_run:
         return (datetime.now() - START_TIME).total_seconds() / 60 / 60 < hours_to_run
     else:
         return True
@@ -101,8 +111,7 @@ def check_runtime():
 def should_check_add_ons():
     """Return True if we should check for add on trades."""
 
-    minutes_between_add_ons_check = CONFIG.get("minutes_between_add_ons_check")
-    if minutes_between_add_ons_check:
+    if cofnig.minutes_between_add_ons_check:
         return (datetime.now() - LAST_ADD_ON_CHECK).total_seconds() / 60 >= minutes_between_add_ons_check
     else:
         return True
@@ -214,7 +223,7 @@ def load_trade_list(partial=False):
             except:
                 # We reached the bottom
                 lowest_visible_points = -1
-            if lowest_visible_points < CONFIG["min_value"]:
+            if lowest_visible_points < config.min_value:
                 # Stop loading because there are no more members with points above min_value
                 break
 
@@ -265,7 +274,7 @@ def build_trades_dict(soup):
 
     for row in soup.find_all("tr", id=lambda x: x and x.startswith("uc_")):
         member_points = int(row.find("td", class_="points").text)
-        if member_points < CONFIG["min_value"]:
+        if member_points < config.min_value:
             # This member doesn't have enough points so move on to next row
             continue
         member_link = row.find("td", class_="member").find("a", href=lambda x: x and x.startswith("/profiles"))
@@ -312,7 +321,7 @@ def find_highest_value_bundle(trades):
 
     LOGGER.debug("Highest value bundle:\n{}".format(pprint.pformat(highest_value_bundle)))
 
-    if highest_value_bundle[1]["value"] >= CONFIG["min_value"]:
+    if highest_value_bundle[1]["value"] >= config.min_value:
         return highest_value_bundle
     else:
         return None
@@ -357,7 +366,7 @@ def find_trades():
 
     global LAST_ADD_ON_CHECK
 
-    if CONFIG.get("find_add_ons") and should_check_add_ons():
+    if config.find_add_ons and should_check_add_ons():
         LOGGER.debug("Looking for add ons...")
         find_and_send_add_ons()
         LAST_ADD_ON_CHECK = datetime.now()
