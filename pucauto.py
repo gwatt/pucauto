@@ -10,21 +10,8 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 from lib import logger
 
-try:
-    import config
-except:
-    print 'No config.py found!'
-    exit()
+import config
 
-config_vars = dir(config)
-for var in ['username', 'password', 'min_value']:
-    if var not in config_vars:
-        print "Required configuration '%s' not found!" % (var,)
-        exit()
-if 'find_add_ons' not in config_vars:
-    config.find_add_ons = False
-if 'minutes_between_add_ons_check' not in config_vars:
-    config.minutes_between_add_ons_check = None
 
 LOGGER = logger.get_default_logger(__name__)
 DRIVER = webdriver.Firefox()
