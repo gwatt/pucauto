@@ -44,14 +44,14 @@ when prompted.
 
 ### Configuring
 
-1. Open `config.example.json` in a plain text editor like Notepad or Sublime
+1. Open `config.example.py` in a plain text editor like Notepad or Sublime
  Text.
 2. Enter your Pucatrade username and password in place of the default values in
  the file. Be sure to keep the quotes around the values.
 3. Set the min_value to the lowest value you want Pucauto to accept. Cards or
  bundles under this value will not be traded.
-4. Save the file as `config.json`, _not_ `config.example.json` or `config.json.txt`.
-5. You'll get an error on startup if you forget to save as `config.json`.
+4. Save the file as `config.py`, _not_ `config.example.py` or `config.py.txt`.
+5. You'll get an error on startup if you forget to save as `config.py`.
 
 ### Running
 
@@ -74,7 +74,7 @@ make trading even better. Come back to this page occasionally and check out the
 Changelog at the bottom to learn about new features. If an update happens you
 can upgrade by:
 
-* If you downloaded the .zip, it's probably easiest to just move your config.json
+* If you downloaded the .zip, it's probably easiest to just move your config.py
  file to your desktop, delete your Pucauto folder and re-download the new zip.
  You don't have to follow the full installation instructions again.
 * If you cloned the repository, you probably know how to use git to fetch the
@@ -113,12 +113,12 @@ Successfully sent 2 out of 3 cards worth 432 points!
 
 #### 2015-12-03 [v0.4.1](https://github.com/tomreece/pucauto/archive/v0.4.1.zip)
 * Most importantly, speed up bundle finding by only loading enough of the trade
-list to reach a bottom member whose points exceed `min_value` in config.json
-* You can now configure add on searching. See the `config.example.json` file for the new options available to you.
+list to reach a bottom member whose points exceed `min_value` in config.py
+* You can now configure add on searching. See the `config.example.py` file for the new options available to you.
 * Turn off add on searching all-together by setting `find_add_ons` to `false` in
-config.json
+config.py
 * Since checking for trade add ons takes a bit of time, configure how often to
-check with the `minutes_between_add_ons_check` value in config.json.
+check with the `minutes_between_add_ons_check` value in config.py.
 * Fix a bug where two users with the exact same name, e.g "Matt", would be
 considered the same bundle recipient. Now unique profile IDs are used instead.
 
@@ -148,8 +148,8 @@ up to exceed your configured min_value. This bundling helps you get rid of lots
 of low value cards without wasting money on stamps.
 
 #### 2015-10-22 [v0.2.0](https://github.com/tomreece/pucauto/archive/v0.2.0.zip)
-* Username and password are now entered in `config.json` instead of as arguments
+* Username and password are now entered in `config.py` instead of as arguments
 when starting the script. So now you start the bot with `python pucauto.py`
-after setting the values in `config.json`.
+after setting the values in `config.py`.
 * Added a `min_value` configuration option. Pucauto will only accept trades
 above this value.
