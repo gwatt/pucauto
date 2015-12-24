@@ -88,7 +88,7 @@ def check_runtime():
     """
 
     if config.hours_to_run:
-        return (datetime.now() - START_TIME).total_seconds() / 60 / 60 < hours_to_run
+        return (datetime.now() - START_TIME).total_seconds() / 60 / 60 < config.hours_to_run
     else:
         return True
 
@@ -96,8 +96,8 @@ def check_runtime():
 def should_check_add_ons():
     """Return True if we should check for add on trades."""
 
-    if cofnig.minutes_between_add_ons_check:
-        return (datetime.now() - LAST_ADD_ON_CHECK).total_seconds() / 60 >= minutes_between_add_ons_check
+    if config.minutes_between_add_ons_check:
+        return (datetime.now() - LAST_ADD_ON_CHECK).total_seconds() / 60 >= config.minutes_between_add_ons_check
     else:
         return True
 
